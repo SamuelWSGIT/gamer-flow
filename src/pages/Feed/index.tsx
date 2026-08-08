@@ -3,6 +3,7 @@ import PostCard from '../../components/PostCard'
 import PostsGrid from '../../components/PostsGrid'
 import SearchInput from '../../components/SearchInput'
 import { fetchPosts, type Post } from '../../services/api'
+import { formatDuration } from '../../util'
 
 const postPromise = fetchPosts()
 
@@ -15,13 +16,13 @@ function Feed() {
         {posts.map((post) => (
           <PostCard
             key={post.id}
-            time={String(post.durationSeconds)}
+            time={formatDuration(post.durationSeconds)}
             activity={post.type}
             distance={String(post.distanceMeters / 1000)}
             calories={String(post.calories)}
             heartRate={String(post.heartRateBpm)}
             author={post.author.name}
-            avatarSrc={post.author.avatar || "https://i.pravatar.cc/96?img=68"}
+            avatarSrc={post.author.avatarUrl || "https://i.pravatar.cc/96?img=68"}
             likes={post.likesCount}
             comments={post.commentsCount}
             description={post.description}

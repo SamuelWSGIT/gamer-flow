@@ -56,17 +56,17 @@ function PostCard({
           <StatChip
             icon={<Footprints size={16} />}
             label="Distância"
-            value={distance}
+            value={distance + " Km"}
           />
           <StatChip
             icon={<Flame size={16} />}
             label="Calorias"
-            value={calories}
+            value={calories + " Kcal"}
           />
           <StatChip
             icon={<HeartPulse size={16} />}
             label="Batimentos"
-            value={heartRate}
+            value={heartRate + " BPM"}
           />
         </div>
         <div className={styles.author}>

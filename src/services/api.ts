@@ -8,7 +8,7 @@ export interface Author {
     id: string
     name: string
     username: string
-    avatar?: string
+    avatarUrl?: string
 }
 
 export interface Post {
