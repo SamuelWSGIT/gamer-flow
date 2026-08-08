@@ -8,21 +8,28 @@ import EditProfile from './pages/EditProfile/index.tsx'
 import Login from './pages/Login/index.tsx'
 import NewPost from './pages/NewPost/index.tsx'
 import Profile from './pages/Profile/index.tsx'
+import AppLayout from './components/AppLayout/index.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        
-        <Route path="/" element={<Feed />} />
-        
-        <Route path="/cadastro" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        
-        <Route path="/postagem" element={<NewPost />} />
 
-        <Route path="/perfil" element={<Profile />} />
-        <Route path="/perfil/editar" element={<EditProfile />} />
+        <Route path="/auth">
+          <Route path="cadastro" element={<Register />} />
+          <Route path="login" element={<Login />} />
+        </Route>
+        
+        
+        <Route path="/" element={<AppLayout />}>
+
+          <Route path="" element={<Feed />} />
+          <Route path="postagem" element={<NewPost />} />
+          <Route path="perfil" element={<Profile />} />
+          <Route path="perfil/editar" element={<EditProfile />} />
+
+        </Route>
+
 
       </Routes>
     </BrowserRouter>
