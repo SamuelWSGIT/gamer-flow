@@ -9,6 +9,8 @@ import Login from './pages/Login/index.tsx'
 import NewPost from './pages/NewPost/index.tsx'
 import Profile from './pages/Profile/index.tsx'
 import AppLayout from './components/AppLayout/index.tsx'
+import { ProtectedRoute } from './components/ProtectedRoute/index.tsx'
+import { Logout } from './pages/Logout/index.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -18,15 +20,20 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/auth">
           <Route path="cadastro" element={<Register />} />
           <Route path="login" element={<Login />} />
+          <Route path="logout" element={<Logout />} />
         </Route>
         
         
         <Route path="/" element={<AppLayout />}>
 
-          <Route path="" element={<Feed />} />
-          <Route path="postagem" element={<NewPost />} />
-          <Route path="perfil" element={<Profile />} />
-          <Route path="perfil/editar" element={<EditProfile />} />
+          <Route path="" element={<ProtectedRoute />}>
+            <Route path="" element={<Feed />} />
+            <Route path="postagem" element={<NewPost />} />
+            <Route path="perfil" element={<Profile />} />
+            <Route path="perfil/editar" element={<EditProfile />} />
+
+          </Route>
+
 
         </Route>
 
