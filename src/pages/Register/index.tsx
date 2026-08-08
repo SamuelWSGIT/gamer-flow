@@ -30,7 +30,12 @@ function Register() {
           Cadastrar
         </Button>
       </Form>
-      <AuthLink linkText="Faça seu login!">Já tem conta?</AuthLink>
+      <AuthLink
+        linkText="Faça seu login!"
+        to="/auth/login"
+      >
+        Já tem conta?
+      </AuthLink>
     </AuthLayout>
   )
 }

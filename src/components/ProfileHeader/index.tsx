@@ -3,6 +3,7 @@ import { Pencil } from 'lucide-react'
 import Avatar from '../Avatar'
 import Text from '../Text'
 import styles from './ProfileHeader.module.css'
+import { NavLink } from 'react-router'
 
 type ProfileHeaderProps = ComponentProps<'header'> & {
   avatarSrc: string
@@ -31,10 +32,10 @@ function ProfileHeader({
           <strong>{workouts}</strong> Treinos
         </p>
       </div>
-      <a className={styles.edit} href="#">
+      <NavLink className={styles.edit} to="/perfil/editar">
         <Pencil size={20} />
         Editar
-      </a>
+      </NavLink>
     </header>
   )
 }
