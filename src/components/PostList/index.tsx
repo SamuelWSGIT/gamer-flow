@@ -1,7 +1,7 @@
 import { use } from 'react'
 import PostCard from '../../components/PostCard'
 import PostsGrid from '../../components/PostsGrid'
-import { fetchPosts, type Post } from '../../services/api'
+import { fetchPosts, type Post } from '../../services/posts'
 import { formatDuration } from '../../util'
 
 const postPromise = fetchPosts()
