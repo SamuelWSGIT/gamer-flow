@@ -6,9 +6,7 @@ import Profile from './pages/Profile'
 import EditProfile from './pages/EditProfile'
 
 function App() {
-  // return <Register />
-  // return <Login />
-  // return <Feed />
+
   return <>
 
     <Register />

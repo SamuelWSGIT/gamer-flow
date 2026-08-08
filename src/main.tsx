@@ -1,10 +1,17 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
+import { BrowserRouter, Route, Routes } from 'react-router'
+import Feed from './pages/Feed/index.tsx'
+import Register from './pages/Register/index.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Feed />} />
+        <Route path="/cadastro" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
   </StrictMode>,
 )
