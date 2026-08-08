@@ -6,7 +6,7 @@ import styles from './ProfileHeader.module.css'
 import { NavLink } from 'react-router'
 
 type ProfileHeaderProps = ComponentProps<'header'> & {
-  avatarSrc: string
+  avatarSrc?: string
   username: string
   name: string
   bio: string

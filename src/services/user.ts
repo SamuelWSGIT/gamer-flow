@@ -10,6 +10,9 @@ export interface User {
     id: string
     name: string
     username: string
+    avatarUrl: string
+    bio?: string
+    workoutsCount?: number
 }
 
 export interface LoggedUser {
@@ -30,5 +33,19 @@ export async function createUser(user: NewUser): Promise<User> {
 export async function signIn(credentials: Credentials): Promise<LoggedUser> {
     const response = await instance.post<LoggedUser>('/auth/login', credentials)
     console.log('user data =>', response.data)
+
+    if (response.data.token) {
+        sessionStorage.setItem('token', response.data.token)
+    }
+
+    return response.data
+}
+
+export async function fetchLoggedUser(): Promise<User> {
+    const response = await instance.get<User>('/users/me', {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        }
+    })
     return response.data
 }
