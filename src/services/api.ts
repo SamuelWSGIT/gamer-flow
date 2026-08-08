@@ -1,3 +1,9 @@
+import axios from "axios";
+
+const instance = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+});
+
 export interface Author {
     id: string
     name: string
@@ -18,5 +24,14 @@ export interface Post {
     likedByMe: boolean
     commentsCount: number
     createdAt: string
+    author: Author
+}
+
+export async function fetchPosts(): Promise<Post[]> {
+    const response = await instance.get<{
+        data: Post[]
+    }>('/posts')
+
+    return response.data.data
 }
 
