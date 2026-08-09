@@ -1,11 +1,22 @@
-import { Suspense, use, useState } from 'react'
+import { Suspense, use, useState, useTransition } from 'react'
 import { ErrorBoundary } from '../../components/ErrorBoundary'
 import PostList from '../../components/PostList'
 import ProfileHeader from '../../components/ProfileHeader'
 import Tab from '../../components/Tab'
 import Tabs from '../../components/Tabs'
-import { fetchPostsCreatedByTheLoggedUser } from '../../services/posts'
+import {
+  fetchPostsCreatedByTheLoggedUser,
+  fetchPostsLikedByTheLoggedUser,
+  type Post,
+} from '../../services/posts'
 import { fetchLoggedUser, type User } from '../../services/user'
+
+const tabFetchers = {
+  posts: fetchPostsCreatedByTheLoggedUser,
+  likes: fetchPostsLikedByTheLoggedUser,
+}
+
+type TabId = keyof typeof tabFetchers
 
 type ProfileInfoProps = {
   userPromise: Promise<User>
@@ -28,9 +39,30 @@ function ProfileInfo({ userPromise }: ProfileInfoProps) {
 
 function Profile() {
 
+  const [activeTab, setActiveTab] = useState<TabId>('posts')
+
+  const [isPending, startTransition] = useTransition()
+
   const [userPromise] = useState(() => fetchLoggedUser())
 
-  const [postPromise] = useState(() => fetchPostsCreatedByTheLoggedUser())
+  // Guardamos uma promise por tab: voltar para uma tab já carregada é
+  // instantâneo, sem refetch e sem passar pelo fallback de novo.
+  const [postPromises, setPostPromises] = useState<Partial<Record<TabId, Promise<Post[]>>>>(
+    () => ({ posts: tabFetchers.posts() })
+  )
+
+  function handleTabChange(tab: TabId) {
+    if (tab === activeTab) return
+
+    const postPromise = postPromises[tab] ?? tabFetchers[tab]()
+
+    // startTransition mantém a lista atual na tela enquanto a nova carrega,
+    // em vez de trocar tudo pelo "Carregando seus posts...".
+    startTransition(() => {
+      setPostPromises((promises) => ({ ...promises, [tab]: postPromise }))
+      setActiveTab(tab)
+    })
+  }
 
   return (
     <>
@@ -40,14 +72,23 @@ function Profile() {
         </Suspense>
       </ErrorBoundary>
       <Tabs>
-        <Tab active>Posts</Tab>
-        <Tab>Curtidas</Tab>
+        <Tab active={activeTab === 'posts'} onClick={() => handleTabChange('posts')}>
+          Posts
+        </Tab>
+        <Tab active={activeTab === 'likes'} onClick={() => handleTabChange('likes')}>
+          Curtidas
+        </Tab>
       </Tabs>
-      <ErrorBoundary fallback={<div>Ocorreu um erro ao carregar os seus posts.</div>}>
-        <Suspense fallback={<div>Carregando seus posts...</div>}>
-          <PostList postPromise={postPromise} />
-        </Suspense>
-      </ErrorBoundary>
+      <div style={{ opacity: isPending ? 0.5 : 1 }}>
+        <ErrorBoundary
+          resetKey={activeTab}
+          fallback={<div>Ocorreu um erro ao carregar os seus posts.</div>}
+        >
+          <Suspense fallback={<div>Carregando seus posts...</div>}>
+            <PostList postPromise={postPromises[activeTab]!} />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
     </>
   )
 }

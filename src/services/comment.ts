@@ -16,5 +16,5 @@ export async function getComments(postId: string): Promise<Comment[]> {
 
 export async function createComment(postId: string, text: string): Promise<Comment> {
   const response = await instance.post(`/posts/${postId}/comments`, { text });
-  return response.data.data;
+  return response.data;
 }

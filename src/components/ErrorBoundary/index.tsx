@@ -4,10 +4,13 @@ import type { ErrorInfo, ReactNode } from 'react'
 type ErrorBoundaryProps = {
   children?: ReactNode
   fallback?: ReactNode
+  // Quando este valor muda, o boundary volta a tentar renderizar os children.
+  resetKey?: unknown
 }
 
 type ErrorBoundaryState = {
   hasError: boolean
+  resetKey?: unknown
 }
 
 function logErrorToMyService(
@@ -24,12 +27,23 @@ export class ErrorBoundary extends React.Component<
 > {
   constructor(props: ErrorBoundaryProps) {
     super(props)
-    this.state = { hasError: false }
+    this.state = { hasError: false, resetKey: props.resetKey }
   }
 
   static getDerivedStateFromError(): ErrorBoundaryState {
     // Update state so the next render will show the fallback UI.
     return { hasError: true }
+  }
+
+  static getDerivedStateFromProps(
+    props: ErrorBoundaryProps,
+    state: ErrorBoundaryState,
+  ): ErrorBoundaryState | null {
+    if (props.resetKey !== state.resetKey) {
+      return { hasError: false, resetKey: props.resetKey }
+    }
+
+    return null
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
