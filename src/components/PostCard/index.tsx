@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react'
+import { useState, type ComponentProps } from 'react'
 import {
   Flame,
   Footprints,
@@ -12,6 +12,7 @@ import StatChip from '../StatChip'
 import Tag from '../Tag'
 import Text from '../Text'
 import styles from './PostCard.module.css'
+import { likePost, unlikePost } from '../../services/posts'
 
 type PostCardProps = ComponentProps<'article'> & {
   imageUrl?: string | null
@@ -22,9 +23,11 @@ type PostCardProps = ComponentProps<'article'> & {
   heartRate: string
   author: string
   avatarSrc?: string
-  likes: string | number
+  likes: number
   comments: string | number
   description: string
+  liked: boolean
+  id: string
 }
 
 function PostCard({
@@ -36,11 +39,39 @@ function PostCard({
   heartRate,
   author,
   avatarSrc,
-  likes,
+  likes: likesInitial,
   comments,
   description,
+  liked: likedInitial,
+  id,
   ...rest
 }: PostCardProps) {
+
+  const [likes, setLikes] = useState<number>(likesInitial)
+  const [liked, setLiked] = useState(likedInitial)
+
+  async function handleLike() {
+
+    try {
+
+      if (liked) {
+        await unlikePost(id)
+        setLiked(false)
+        setLikes((prevLikes) => prevLikes - 1)
+      } else {
+        await likePost(id)
+        setLiked(true)
+        setLikes((prevLikes) => prevLikes + 1)
+      }
+
+    }
+    catch (error) {
+      console.error('Error liking the post:', error)
+    }
+
+
+  }
+
   return (
     <article className={styles.postCard} {...rest}>
       {imageUrl ? (
@@ -76,9 +107,16 @@ function PostCard({
       </div>
       <footer className={styles.footer}>
         <div className={styles.reactions}>
-          <button type="button" className={styles.reaction}>
+          <button 
+            type="button" 
+            className={liked ? `${styles.reaction} ${styles.liked}` : styles.reaction}
+            onClick={handleLike}
+          >
+            
             <ThumbsUp size={20} />
+            
             {likes}
+
           </button>
           <button type="button" className={styles.reaction}>
             <MessageSquare size={20} />

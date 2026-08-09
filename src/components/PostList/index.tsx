@@ -28,6 +28,8 @@ function PostList({ postPromise }: PostListProps) {
             comments={post.commentsCount}
             description={post.description}
             imageUrl={post.imageUrl}
+            liked={post.likedByMe}
+            id={post.id}
           />
         ))}
       </PostsGrid>

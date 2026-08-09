@@ -68,3 +68,11 @@ export async function createPost(post: NewPost): Promise<Post> {
 
     return response.data
 }
+
+export async function likePost(postId: string): Promise<void> {
+    await instance.post(`/posts/${postId}/likes`)
+}
+
+export async function unlikePost(postId: string): Promise<void> {
+    await instance.delete(`/posts/${postId}/likes`)
+}
