@@ -23,6 +23,15 @@ export interface Post {
     author: Author
 }
 
+export interface NewPost {
+    durationSeconds: number
+    type : "walking" | "running"
+    distanceMeters: number
+    calories: number
+    heartRateBpm: number
+    description: string
+}
+
 export async function fetchPosts(): Promise<Post[]> {
     const response = await instance.get<{
         data: Post[]
@@ -31,3 +40,18 @@ export async function fetchPosts(): Promise<Post[]> {
     return response.data.data
 }
 
+export async function createPost(post: NewPost): Promise<Post> {
+
+    const body = new FormData()
+
+    body.append('durationSeconds', post.durationSeconds.toString())
+    body.append('type', post.type)
+    body.append('distanceMeters', post.distanceMeters.toString())
+    body.append('calories', post.calories.toString())
+    body.append('heartRateBpm', post.heartRateBpm.toString())
+    body.append('description', post.description)
+
+    const response = await instance.post<Post>('/posts', body)
+
+    return response.data
+}

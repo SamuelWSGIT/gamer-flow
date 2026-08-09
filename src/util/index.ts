@@ -6,3 +6,9 @@ export function formatDuration(seconds: number) {
   const minutes = String(totalMinutes % 60).padStart(2, '0')
   return `${hours}:${minutes}`
 }
+
+export function parseDuration(duration: string) {
+  // o inverso do formatDuration: "HH:MM" -> total de segundos
+  const [hours = '0', minutes = '0'] = duration.split(':')
+  return Number(hours) * 3600 + Number(minutes) * 60
+}

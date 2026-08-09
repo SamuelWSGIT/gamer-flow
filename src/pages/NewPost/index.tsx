@@ -1,4 +1,6 @@
 import { Flame, Footprints, HeartPulse, Timer } from 'lucide-react'
+import { useActionState } from 'react'
+import { useNavigate } from 'react-router'
 import Columns from '../../components/Columns'
 import FormActions from '../../components/FormActions'
 import FormField from '../../components/FormField'
@@ -7,16 +9,62 @@ import ImageUploader from '../../components/ImageUploader'
 import Input from '../../components/Input'
 import Radio from '../../components/Radio'
 import RadioGroup from '../../components/RadioGroup'
+import Text from '../../components/Text'
 import Textarea from '../../components/Textarea'
 import TimeInput from '../../components/TimeInput'
 import Title from '../../components/Title'
+import { createPost } from '../../services/posts'
+import { parseDuration } from '../../util'
 import styles from './NewPost.module.css'
 
 function NewPost() {
+  const navigate = useNavigate()
+
+  const [error, createPostAction, isPending] = useActionState(
+    async (_previousError: string | null, formData: FormData) => {
+      const hours = String(formData.get('hours') ?? '0')
+      const minutes = String(formData.get('minutes') ?? '0')
+      const distanceKm = Number(formData.get('distance'))
+      const calories = Number(formData.get('calories'))
+      const heartRateBpm = Number(formData.get('heart-rate'))
+      const description = String(formData.get('description') ?? '').trim()
+      const type = formData.get('workout-type')
+
+      if (type !== 'walking' && type !== 'running') {
+        return 'Escolha o tipo de treino.'
+      }
+
+      // "HH:MM" -> segundos; km -> metros
+      const durationSeconds = parseDuration(`${hours}:${minutes}`)
+      const distanceMeters = Math.round(distanceKm * 1000)
+
+      if (!durationSeconds || !distanceMeters) {
+        return 'Informe o tempo e a distância do treino.'
+      }
+
+      try {
+        await createPost({
+          durationSeconds,
+          type,
+          distanceMeters,
+          calories,
+          heartRateBpm,
+          description,
+        })
+      } catch {
+        return 'Não foi possível publicar sua postagem. Tente novamente.'
+      }
+
+      navigate('/')
+      return null
+    },
+    null
+  )
+
   return (
     <>
       <Title>Nova postagem</Title>
-      <form>
+      <form action={createPostAction}>
         <Columns mediaSize="fluid">
           <ImageUploader
             name="image"
@@ -42,7 +90,14 @@ function NewPost() {
               }
               htmlFor="distance"
             >
-              <Input id="distance" type="number" min={0} placeholder="5" />
+              <Input
+                id="distance"
+                name="distance"
+                type="number"
+                min={0}
+                step="0.01"
+                placeholder="5"
+              />
             </FormField>
             <FormField
               label={
@@ -52,7 +107,13 @@ function NewPost() {
               }
               htmlFor="calories"
             >
-              <Input id="calories" type="number" min={0} placeholder="300" />
+              <Input
+                id="calories"
+                name="calories"
+                type="number"
+                min={0}
+                placeholder="300"
+              />
             </FormField>
             <FormField
               label={
@@ -62,23 +123,31 @@ function NewPost() {
               }
               htmlFor="heart-rate"
             >
-              <Input id="heart-rate" type="number" min={0} placeholder="120" />
+              <Input
+                id="heart-rate"
+                name="heart-rate"
+                type="number"
+                min={0}
+                placeholder="120"
+              />
             </FormField>
             <FormField label="Descrição" htmlFor="description">
               <Textarea
                 id="description"
+                name="description"
                 placeholder="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
               />
             </FormField>
             <RadioGroup label="Tipo de Treino">
-              <Radio name="workout-type" id="walking">
+              <Radio name="workout-type" id="walking" value="walking">
                 Caminhada
               </Radio>
-              <Radio name="workout-type" id="running">
+              <Radio name="workout-type" id="running" value="running">
                 Corrida
               </Radio>
             </RadioGroup>
-            <FormActions />
+            {error && <Text>{error}</Text>}
+            <FormActions submit isPending={isPending} />
           </div>
         </Columns>
       </form>

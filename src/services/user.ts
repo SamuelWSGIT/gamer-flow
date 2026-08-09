@@ -42,10 +42,6 @@ export async function signIn(credentials: Credentials): Promise<LoggedUser> {
 }
 
 export async function fetchLoggedUser(): Promise<User> {
-    const response = await instance.get<User>('/users/me', {
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        }
-    })
+    const response = await instance.get<User>('/users/me')
     return response.data
 }
