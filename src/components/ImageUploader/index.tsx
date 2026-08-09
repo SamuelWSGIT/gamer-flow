@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from 'react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Upload } from 'lucide-react'
 import Button from '../Button'
 import FileItem from '../FileItem'
@@ -11,6 +11,11 @@ type ImageUploaderProps = ComponentProps<'div'> & {
   placeholder?: ReactNode
 }
 
+interface Selected {
+  file: File
+  previewUrl: string
+}
+
 function ImageUploader({
   name,
   fileName,
@@ -19,10 +24,37 @@ function ImageUploader({
 }: ImageUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const [selected, setSelected] = useState<Selected | null>(null)
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const previewUrl = URL.createObjectURL(file)
+      setSelected({ file, previewUrl })
+    }
+  }
+
+  const handleRemove = () => {
+    setSelected(null)
+    if (inputRef.current) {
+      inputRef.current.value = ''
+    }
+  }
+
   return (
     <div className={styles.imageUploader} {...rest}>
-      {placeholder}
-      <input ref={inputRef} type="file" name={name} accept="image/*" hidden />
+      {
+        selected ? (
+          <img
+            src={selected.previewUrl} 
+            className={styles.preview}
+          />
+        ) : (
+          placeholder
+        )
+
+      }
+      <input ref={inputRef} type="file" name={name} accept="image/*" hidden onChange={handleChange} />
       <Button
         variant="outline"
         type="button"
@@ -31,7 +63,7 @@ function ImageUploader({
       >
         Carregar imagem
       </Button>
-      {fileName && <FileItem>{fileName}</FileItem>}
+      {selected && <FileItem onRemove={handleRemove}>{selected.file.name}</FileItem>}
     </div>
   )
 }
