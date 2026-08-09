@@ -1,18 +1,19 @@
-import { use } from 'react'
-import PostCard from '../../components/PostCard'
-import PostsGrid from '../../components/PostsGrid'
+import { Suspense, use, useState } from 'react'
+import { ErrorBoundary } from '../../components/ErrorBoundary'
+import PostList from '../../components/PostList'
 import ProfileHeader from '../../components/ProfileHeader'
 import Tab from '../../components/Tab'
 import Tabs from '../../components/Tabs'
+import { fetchPostsCreatedByTheLoggedUser } from '../../services/posts'
 import { fetchLoggedUser } from '../../services/user'
-
-const posts = [1, 2, 3, 4, 5, 6]
 
 const promiseFetchLoggedUser = fetchLoggedUser()
 
 function Profile() {
 
   const loggedUser = use(promiseFetchLoggedUser)
+
+  const [postPromise] = useState(() => fetchPostsCreatedByTheLoggedUser())
 
   return (
     <>
@@ -27,23 +28,11 @@ function Profile() {
         <Tab active>Posts</Tab>
         <Tab>Curtidas</Tab>
       </Tabs>
-      <PostsGrid>
-        {posts.map((post) => (
-          <PostCard
-            key={post}
-            time="00:30"
-            activity="Caminhada intensa"
-            distance="2 Km"
-            calories="300 Kcal"
-            heartRate="120 BPM"
-            author="Laura Mota Linhares"
-            avatarSrc="https://i.pravatar.cc/96?img=68"
-            likes={5}
-            comments={2}
-            description="Hoje dei meu mínimo e esse foi meu máximo! kkkk"
-          />
-        ))}
-      </PostsGrid>
+      <ErrorBoundary fallback={<div>Ocorreu um erro ao carregar os seus posts.</div>}>
+        <Suspense fallback={<div>Carregando seus posts...</div>}>
+          <PostList postPromise={postPromise} />
+        </Suspense>
+      </ErrorBoundary>
     </>
   )
 }

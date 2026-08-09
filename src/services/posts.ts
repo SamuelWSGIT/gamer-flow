@@ -41,6 +41,14 @@ export async function fetchPosts(): Promise<Post[]> {
     return response.data.data
 }
 
+export async function fetchPostsCreatedByTheLoggedUser(): Promise<Post[]> {
+    const response = await instance.get<{
+        data: Post[]
+    }>('/posts?createdBy=me')
+
+    return response.data.data
+}
+
 export async function createPost(post: NewPost): Promise<Post> {
 
     const body = new FormData()
