@@ -6,7 +6,7 @@
   width: 100%;
 }
 
-.imageUploader button {
+.imageUploader > button {
   width: 100%;
 }
 
