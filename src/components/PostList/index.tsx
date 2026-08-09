@@ -23,6 +23,7 @@ function PostList() {
             likes={post.likesCount}
             comments={post.commentsCount}
             description={post.description}
+            imageUrl={post.imageUrl}
           />
         ))}
       </PostsGrid>

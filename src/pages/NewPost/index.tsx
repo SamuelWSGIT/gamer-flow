@@ -13,7 +13,7 @@ import Text from '../../components/Text'
 import Textarea from '../../components/Textarea'
 import TimeInput from '../../components/TimeInput'
 import Title from '../../components/Title'
-import { createPost } from '../../services/posts'
+import { createPost, type NewPost } from '../../services/posts'
 import { parseDuration } from '../../util'
 import styles from './NewPost.module.css'
 
@@ -28,11 +28,11 @@ function NewPost() {
       const calories = Number(formData.get('calories'))
       const heartRateBpm = Number(formData.get('heart-rate'))
       const description = String(formData.get('description') ?? '').trim()
-      const type = formData.get('workout-type')
 
-      if (type !== 'walking' && type !== 'running') {
+      if (formData.get('workout-type') !== 'walking' && formData.get('workout-type') !== 'running') {
         return 'Escolha o tipo de treino.'
       }
+      const type: 'walking' | 'running' = formData.get('workout-type') as 'walking' | 'running'
 
       // "HH:MM" -> segundos; km -> metros
       const durationSeconds = parseDuration(`${hours}:${minutes}`)
@@ -42,15 +42,21 @@ function NewPost() {
         return 'Informe o tempo e a distância do treino.'
       }
 
+      const newPost: NewPost = {
+        durationSeconds,
+        type,
+        distanceMeters,
+        calories,
+        heartRateBpm,
+        description,
+      }
+
+      if (formData.get('image') instanceof File) {
+        newPost.image = formData.get('image') as File
+      }
+
       try {
-        await createPost({
-          durationSeconds,
-          type,
-          distanceMeters,
-          calories,
-          heartRateBpm,
-          description,
-        })
+        await createPost(newPost)
       } catch {
         return 'Não foi possível publicar sua postagem. Tente novamente.'
       }

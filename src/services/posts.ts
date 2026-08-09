@@ -30,6 +30,7 @@ export interface NewPost {
     calories: number
     heartRateBpm: number
     description: string
+    image?: File
 }
 
 export async function fetchPosts(): Promise<Post[]> {
@@ -50,6 +51,10 @@ export async function createPost(post: NewPost): Promise<Post> {
     body.append('calories', post.calories.toString())
     body.append('heartRateBpm', post.heartRateBpm.toString())
     body.append('description', post.description)
+
+    if (post.image) {
+        body.append('image', post.image)
+    }
 
     const response = await instance.post<Post>('/posts', body)
 
