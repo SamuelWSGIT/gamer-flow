@@ -5,25 +5,40 @@ import ProfileHeader from '../../components/ProfileHeader'
 import Tab from '../../components/Tab'
 import Tabs from '../../components/Tabs'
 import { fetchPostsCreatedByTheLoggedUser } from '../../services/posts'
-import { fetchLoggedUser } from '../../services/user'
+import { fetchLoggedUser, type User } from '../../services/user'
 
-const promiseFetchLoggedUser = fetchLoggedUser()
+type ProfileInfoProps = {
+  userPromise: Promise<User>
+}
+
+function ProfileInfo({ userPromise }: ProfileInfoProps) {
+
+  const loggedUser: User = use(userPromise)
+
+  return (
+    <ProfileHeader
+      avatarSrc={loggedUser.avatarUrl}
+      username={loggedUser.username}
+      name={loggedUser.name}
+      bio={loggedUser.bio || ''}
+      workouts={loggedUser.workoutsCount || 0}
+    />
+  )
+}
 
 function Profile() {
 
-  const loggedUser = use(promiseFetchLoggedUser)
+  const [userPromise] = useState(() => fetchLoggedUser())
 
   const [postPromise] = useState(() => fetchPostsCreatedByTheLoggedUser())
 
   return (
     <>
-      <ProfileHeader
-        avatarSrc={loggedUser.avatarUrl}
-        username={loggedUser.username}
-        name={loggedUser.name}
-        bio={loggedUser.bio || ''}
-        workouts={loggedUser.workoutsCount || 0}
-      />
+      <ErrorBoundary fallback={<div>Ocorreu um erro ao carregar os seus dados.</div>}>
+        <Suspense fallback={<div>Carregando seus dados...</div>}>
+          <ProfileInfo userPromise={userPromise} />
+        </Suspense>
+      </ErrorBoundary>
       <Tabs>
         <Tab active>Posts</Tab>
         <Tab>Curtidas</Tab>
