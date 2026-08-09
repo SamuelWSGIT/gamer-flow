@@ -21,7 +21,7 @@ type PostCardProps = ComponentProps<'article'> & {
   calories: string
   heartRate: string
   author: string
-  avatarSrc: string | null
+  avatarSrc?: string
   likes: string | number
   comments: string | number
   description: string

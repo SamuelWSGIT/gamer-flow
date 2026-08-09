@@ -23,7 +23,7 @@ function PostList({ postPromise }: PostListProps) {
             calories={String(post.calories)}
             heartRate={String(post.heartRateBpm)}
             author={post.author.name}
-            avatarSrc={post.author.avatarUrl || "https://i.pravatar.cc/96?img=68"}
+            avatarSrc={post.author.avatarUrl}
             likes={post.likesCount}
             comments={post.commentsCount}
             description={post.description}
