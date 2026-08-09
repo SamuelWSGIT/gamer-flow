@@ -145,10 +145,12 @@ function PostCard({
       </div>
       <footer className={styles.footer}>
         <div className={styles.reactions}>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className={liked ? `${styles.reaction} ${styles.liked}` : styles.reaction}
             onClick={handleLike}
+            aria-label="Curtir"
+            aria-pressed={liked}
           >
             
             <ThumbsUp size={20} />
