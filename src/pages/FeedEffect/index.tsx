@@ -31,7 +31,7 @@ function Feed() {
             author={post.author.name}
             avatarSrc={post.author.avatarUrl || "https://i.pravatar.cc/96?img=68"}
             likes={post.likesCount}
-            comments={post.commentsCount}
+            commentsCount={post.commentsCount}
             description={post.description}
           />
         ))}

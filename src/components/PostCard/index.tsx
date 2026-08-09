@@ -1,4 +1,4 @@
-import { useState, type ComponentProps } from 'react'
+import { useEffect, useState, type ComponentProps } from 'react'
 import {
   Flame,
   Footprints,
@@ -7,12 +7,14 @@ import {
   ThumbsUp,
 } from 'lucide-react'
 import Avatar from '../Avatar'
+import CommentsModal from '../CommentsModal'
 import ImagePlaceholder from '../ImagePlaceholder'
 import StatChip from '../StatChip'
 import Tag from '../Tag'
 import Text from '../Text'
 import styles from './PostCard.module.css'
 import { likePost, unlikePost } from '../../services/posts'
+import { createComment, getComments, type Comment } from '../../services/comment'
 
 type PostCardProps = ComponentProps<'article'> & {
   imageUrl?: string | null
@@ -24,7 +26,7 @@ type PostCardProps = ComponentProps<'article'> & {
   author: string
   avatarSrc?: string
   likes: number
-  comments: string | number
+  commentsCount: number
   description: string
   liked: boolean
   id: string
@@ -40,7 +42,7 @@ function PostCard({
   author,
   avatarSrc,
   likes: likesInitial,
-  comments,
+  commentsCount: commentsCountInitial,
   description,
   liked: likedInitial,
   id,
@@ -49,6 +51,42 @@ function PostCard({
 
   const [likes, setLikes] = useState<number>(likesInitial)
   const [liked, setLiked] = useState(likedInitial)
+
+  // o card é o dono dos comentários: a modal só exibe e avisa quando tem um novo
+  const [comments, setComments] = useState<Comment[]>([])
+  const [commentsCount, setCommentsCount] = useState<number>(commentsCountInitial)
+  const [commentsOpen, setCommentsOpen] = useState(false)
+  const [loadingComments, setLoadingComments] = useState(false)
+
+  useEffect(() => {
+    // só busca quando a modal abre, para não disparar um request por card do feed
+    if (!commentsOpen) return
+
+    async function loadComments() {
+      setLoadingComments(true)
+
+      try {
+        const comments = await getComments(id)
+        setComments(comments)
+      } catch (error) {
+        console.error('Error loading the comments:', error)
+      } finally {
+        setLoadingComments(false)
+      }
+    }
+
+    loadComments()
+  }, [commentsOpen, id])
+
+  async function handleComment(text: string) {
+    try {
+      const comment = await createComment(id, text)
+      setComments((prevComments) => [...prevComments, comment])
+      setCommentsCount((prevCount) => prevCount + 1)
+    } catch (error) {
+      console.error('Error creating the comment:', error)
+    }
+  }
 
   async function handleLike() {
 
@@ -118,13 +156,24 @@ function PostCard({
             {likes}
 
           </button>
-          <button type="button" className={styles.reaction}>
+          <button
+            type="button"
+            className={styles.reaction}
+            onClick={() => setCommentsOpen(true)}
+          >
             <MessageSquare size={20} />
-            {comments}
+            {commentsCount}
           </button>
         </div>
         <Text>{description}</Text>
       </footer>
+      <CommentsModal
+        open={commentsOpen}
+        onClose={() => setCommentsOpen(false)}
+        comments={comments}
+        loading={loadingComments}
+        onComment={handleComment}
+      />
     </article>
   )
 }

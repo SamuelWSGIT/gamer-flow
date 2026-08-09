@@ -25,7 +25,7 @@ function PostList({ postPromise }: PostListProps) {
             author={post.author.name}
             avatarSrc={post.author.avatarUrl}
             likes={post.likesCount}
-            comments={post.commentsCount}
+            commentsCount={post.commentsCount}
             description={post.description}
             imageUrl={post.imageUrl}
             liked={post.likedByMe}

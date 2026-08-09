@@ -4,7 +4,7 @@ import Text from '../Text'
 import styles from './Comment.module.css'
 
 type CommentProps = ComponentProps<'li'> & {
-  avatarSrc: string
+  avatarSrc?: string
   author: string
   text: string
 }
