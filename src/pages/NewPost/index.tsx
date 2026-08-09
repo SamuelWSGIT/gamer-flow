@@ -13,7 +13,7 @@ import Text from '../../components/Text'
 import Textarea from '../../components/Textarea'
 import TimeInput from '../../components/TimeInput'
 import Title from '../../components/Title'
-import { createPost, type NewPost } from '../../services/posts'
+import { createPost, type NewPost as NewPostPayload } from '../../services/posts'
 import { parseDuration } from '../../util'
 import styles from './NewPost.module.css'
 
@@ -42,7 +42,7 @@ function NewPost() {
         return 'Informe o tempo e a distância do treino.'
       }
 
-      const newPost: NewPost = {
+      const newPost: NewPostPayload = {
         durationSeconds,
         type,
         distanceMeters,

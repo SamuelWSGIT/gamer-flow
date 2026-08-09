@@ -1,13 +1,17 @@
 import { use } from 'react'
 import PostCard from '../../components/PostCard'
 import PostsGrid from '../../components/PostsGrid'
-import { fetchPosts, type Post } from '../../services/posts'
+import { type Post } from '../../services/posts'
 import { formatDuration } from '../../util'
 
-const postPromise = fetchPosts()
+type PostListProps = {
+  postPromise: Promise<Post[]>
+}
 
-function PostList() {
+function PostList({ postPromise }: PostListProps) {
+
   const posts: Post[] = use(postPromise)
+  
   return (
       <PostsGrid>
         {posts.map((post) => (
