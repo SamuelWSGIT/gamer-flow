@@ -1,13 +1,13 @@
-import { ArrowRight } from 'lucide-react'
-import AuthLayout from '../../components/AuthLayout'
-import AuthLink from '../../components/AuthLink'
-import Button from '../../components/Button'
-import Checkbox from '../../components/Checkbox'
-import Form from '../../components/Form'
-import FormField from '../../components/FormField'
-import Input from '../../components/Input'
-import Text from '../../components/Text'
-import Title from '../../components/Title'
+import { ArrowRight } from "lucide-react";
+import AuthLayout from "../../components/AuthLayout";
+import AuthLink from "../../components/AuthLink";
+import Button from "../../components/Button";
+import Checkbox from "../../components/Checkbox";
+import Form from "../../components/Form";
+import FormField from "../../components/FormField";
+import Input from "../../components/Input";
+import Text from "../../components/Text";
+import Title from "../../components/Title";
 
 function Register() {
   return (
@@ -30,9 +30,11 @@ function Register() {
           Cadastrar
         </Button>
       </Form>
-      <AuthLink linkText="Faça seu login!">Já tem conta?</AuthLink>
+      <AuthLink linkText="Faça seu login!" to="/auth/login">
+        Já tem conta?
+      </AuthLink>
     </AuthLayout>
-  )
+  );
 }
 
-export default Register
+export default Register;

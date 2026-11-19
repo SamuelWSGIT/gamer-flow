@@ -1,4 +1,3 @@
-import AppLayout from '../../components/AppLayout'
 import Avatar from '../../components/Avatar'
 import Columns from '../../components/Columns'
 import FormActions from '../../components/FormActions'
@@ -12,7 +11,7 @@ import styles from './EditProfile.module.css'
 
 function EditProfile() {
   return (
-    <AppLayout>
+    <>
       <form>
         <Columns>
           <ImageUploader
@@ -40,7 +39,7 @@ function EditProfile() {
           </div>
         </Columns>
       </form>
-    </AppLayout>
+    </>
   )
 }
 

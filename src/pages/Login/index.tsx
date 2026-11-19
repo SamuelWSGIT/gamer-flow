@@ -29,6 +29,7 @@ function Login() {
       <AuthLink
         linkText="Crie seu cadastro!"
         icon={<ClipboardList size={20} />}
+        to="/auth/cadastro"
       >
         Ainda não tem conta?
       </AuthLink>

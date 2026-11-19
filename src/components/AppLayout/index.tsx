@@ -1,16 +1,17 @@
 import type { ComponentProps } from 'react'
 import Sidebar from '../Sidebar'
 import styles from './AppLayout.module.css'
+import { Outlet } from 'react-router/internal/react-server-client'
 
 type AppLayoutProps = ComponentProps<'main'>
 
-function AppLayout({ children, ...rest }: AppLayoutProps) {
+function AppLayout({ ...rest }: AppLayoutProps) {
   return (
     <div className={styles.appLayout}>
       <div className={styles.container}>
         <Sidebar />
         <main className={styles.main} {...rest}>
-          {children}
+          <Outlet />
         </main>
       </div>
     </div>

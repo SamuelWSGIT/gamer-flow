@@ -1,13 +1,12 @@
-import AppLayout from '../../components/AppLayout'
-import PostCard from '../../components/PostCard'
-import PostsGrid from '../../components/PostsGrid'
-import SearchInput from '../../components/SearchInput'
+import PostCard from "../../components/PostCard";
+import PostsGrid from "../../components/PostsGrid";
+import SearchInput from "../../components/SearchInput";
 
-const posts = [1, 2, 3, 4, 5, 6]
+const posts = [1, 2, 3, 4, 5, 6];
 
 function Feed() {
   return (
-    <AppLayout>
+    <>
       <SearchInput placeholder="O que você procura?" />
       <PostsGrid>
         {posts.map((post) => (
@@ -26,8 +25,8 @@ function Feed() {
           />
         ))}
       </PostsGrid>
-    </AppLayout>
-  )
+    </>
+  );
 }
 
-export default Feed
+export default Feed;

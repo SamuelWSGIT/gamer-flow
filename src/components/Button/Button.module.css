@@ -26,3 +26,12 @@
 .outline:hover {
   background-color: var(--bg);
 }
+
+.link {
+  background-color: var(--lime);
+  text-decoration: none;
+}
+
+.link:hover {
+  filter: brightness(0.95);
+}

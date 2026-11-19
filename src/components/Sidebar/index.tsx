@@ -11,11 +11,19 @@ function Sidebar({ ...rest }: SidebarProps) {
   return (
     <aside className={styles.sidebar} {...rest}>
       <Logo />
-      <Button>Publicar</Button>
+      <Button variant="link" to="/postagem">
+        Publicar
+      </Button>
       <nav className={styles.nav}>
-        <NavItem icon={<FileText size={24} />}>Feed</NavItem>
-        <NavItem icon={<CircleUserRound size={24} />}>Perfil</NavItem>
-        <NavItem icon={<LogOut size={24} />}>Logout</NavItem>
+        <NavItem to="/" icon={<FileText size={24} />}>
+          Feed
+        </NavItem>
+        <NavItem to="/perfil" icon={<CircleUserRound size={24} />}>
+          Perfil
+        </NavItem>
+        <NavItem to="#" icon={<LogOut size={24} />}>
+          Logout
+        </NavItem>
       </nav>
     </aside>
   )
