@@ -1,44 +1,159 @@
-import PostCard from '../../components/PostCard'
-import PostsGrid from '../../components/PostsGrid'
-import ProfileHeader from '../../components/ProfileHeader'
-import Tab from '../../components/Tab'
-import Tabs from '../../components/Tabs'
+import { useEffect, useRef, useState } from "react";
+import PostCard from "../../components/PostCard";
+import PostsGrid from "../../components/PostsGrid";
+import ProfileHeader from "../../components/ProfileHeader";
+import Tab from "../../components/Tab";
+import Tabs from "../../components/Tabs";
+import Text from "../../components/Text";
+import {
+  fetchPosts,
+  fetchPostsLikedByLoggedUser,
+  type Post,
+} from "../../services/posts";
+import { fetchLoggedUser } from "../../services/user";
+import { formatDuration, getApiErrorMessage } from "../../util";
 
-const posts = [1, 2, 3, 4, 5, 6]
+type ProfileTab = "posts" | "likes";
 
 function Profile() {
+  const [activeTab, setActiveTab] = useState<ProfileTab>("posts");
+  const [loggedUser, setLoggedUser] = useState<Awaited<ReturnType<typeof fetchLoggedUser>> | null>(null);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [likedPosts, setLikedPosts] = useState<Post[] | null>(null);
+  const [likesLoading, setLikesLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const userRequest = useRef<ReturnType<typeof fetchLoggedUser> | null>(null);
+  const postsRequest = useRef<ReturnType<typeof fetchPosts> | null>(null);
+  const likedPostsRequest = useRef<ReturnType<typeof fetchPostsLikedByLoggedUser> | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const userPromise = userRequest.current ??= fetchLoggedUser();
+    const postsPromise = postsRequest.current ??= fetchPosts();
+
+    Promise.all([userPromise, postsPromise])
+      .then(([user, allPosts]) => {
+        if (isMounted) {
+          setLoggedUser(user);
+          setPosts(allPosts.filter((post) => post.author.id === user.id));
+        }
+      })
+      .catch((requestError: unknown) => {
+        if (isMounted) {
+          setError(`Não foi possível carregar o perfil: ${getApiErrorMessage(requestError)}`);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  function handleLikesTab() {
+    setActiveTab("likes");
+
+    if (likedPosts !== null || likedPostsRequest.current) {
+      return;
+    }
+
+    setLikesLoading(true);
+    const request = likedPostsRequest.current ??= fetchPostsLikedByLoggedUser();
+
+    request
+      .then((fetchedPosts) => {
+        setLikedPosts(fetchedPosts);
+      })
+      .catch((requestError: unknown) => {
+        setError(`Não foi possível carregar as curtidas: ${getApiErrorMessage(requestError)}`);
+        likedPostsRequest.current = null;
+      })
+      .finally(() => {
+        setLikesLoading(false);
+      });
+  }
+
+  function handlePostLikeChange(post: Post, liked: boolean) {
+    setLikedPosts((previousPosts) => {
+      if (previousPosts === null) {
+        return previousPosts;
+      }
+
+      if (!liked) {
+        return previousPosts.filter((previousPost) => previousPost.id !== post.id);
+      }
+
+      if (previousPosts.some((previousPost) => previousPost.id === post.id)) {
+        return previousPosts;
+      }
+
+      return [
+        ...previousPosts,
+        { ...post, likedByMe: true, likesCount: post.likesCount + 1 },
+      ];
+    });
+  }
+
+  if (error) {
+    return <Text role="alert">{error}</Text>;
+  }
+
+  if (!loggedUser) {
+    return <Text>Carregando perfil...</Text>;
+  }
+
+  const visiblePosts = activeTab === "posts" ? posts : likedPosts || [];
+
   return (
     <>
       <ProfileHeader
-        avatarSrc="https://i.pravatar.cc/300?img=59"
-        username="@julio"
-        name="Júlio Oliveira"
-        bio="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation."
-        workouts={3}
+        avatarSrc={loggedUser.avatarUrl}
+        username={loggedUser.username}
+        name={loggedUser.name}
+        bio={loggedUser.bio || ""}
+        workouts={loggedUser.workoutsCount || 0}
       />
       <Tabs>
-        <Tab active>Posts</Tab>
-        <Tab>Curtidas</Tab>
+        <Tab active={activeTab === "posts"} onClick={() => setActiveTab("posts")}>
+          Posts
+        </Tab>
+        <Tab active={activeTab === "likes"} onClick={handleLikesTab}>
+          Curtidas
+        </Tab>
       </Tabs>
-      <PostsGrid>
-        {posts.map((post) => (
-          <PostCard
-            key={post}
-            time="00:30"
-            activity="Caminhada intensa"
-            distance="2 Km"
-            calories="300 Kcal"
-            heartRate="120 BPM"
-            author="Laura Mota Linhares"
-            avatarSrc="https://i.pravatar.cc/96?img=68"
-            likes={5}
-            comments={2}
-            description="Hoje dei meu mínimo e esse foi meu máximo! kkkk"
-          />
-        ))}
-      </PostsGrid>
+      {activeTab === "likes" && likesLoading ? (
+        <Text>Carregando curtidas...</Text>
+      ) : (
+        <PostsGrid>
+          {visiblePosts.length === 0 && (
+            <Text>
+              {activeTab === "posts"
+                ? "Você ainda não publicou nenhum post."
+                : "Você ainda não curtiu nenhum post."}
+            </Text>
+          )}
+          {visiblePosts.map((post) => (
+            <PostCard
+              key={post.id}
+              imageUrl={post.imageUrl}
+              time={formatDuration(post.durationSeconds)}
+              activity={post.type}
+              distance={`${post.distanceMeters / 1000}km`}
+              calories={`${post.calories} kcal`}
+              heartRate={`${post.heartRateBpm} bpm`}
+              author={post.author.name}
+              avatarSrc={post.author.avatarUrl || loggedUser.avatarUrl}
+              likes={post.likesCount}
+              liked={post.likedByMe}
+              comments={post.commentsCount}
+              description={post.description}
+              id={post.id}
+              onLikeChange={(liked) => handlePostLikeChange(post, liked)}
+            />
+          ))}
+        </PostsGrid>
+      )}
     </>
-  )
+  );
 }
 
-export default Profile
+export default Profile;

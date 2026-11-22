@@ -21,7 +21,7 @@ function Sidebar({ ...rest }: SidebarProps) {
         <NavItem to="/perfil" icon={<CircleUserRound size={24} />}>
           Perfil
         </NavItem>
-        <NavItem to="#" icon={<LogOut size={24} />}>
+        <NavItem to="/auth/logout" icon={<LogOut size={24} />}>
           Logout
         </NavItem>
       </nav>

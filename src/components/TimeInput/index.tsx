@@ -8,12 +8,12 @@ function TimeInput({ ...rest }: TimeInputProps) {
   return (
     <div className={styles.timeInput} {...rest}>
       <div className={styles.field}>
-        <Input id="hours" placeholder="00" />
+        <Input id="hours" name="hours" type="number" min={0} placeholder="00" required />
         <span className={styles.caption}>Horas</span>
       </div>
       <span className={styles.separator}>:</span>
       <div className={styles.field}>
-        <Input id="minutes" placeholder="30" />
+        <Input id="minutes" name="minutes" type="number" min={0} max={59} placeholder="30" required />
         <span className={styles.caption}>Minutos</span>
       </div>
     </div>
