@@ -84,13 +84,17 @@ function Login() {
     <AuthLayout bannerImage="/images/cyberpunk-banner-login.png">
       <Title>Access terminal</Title>
       <Text bold>Conecte-se ao seu arquivo de partidas.</Text>
+      <Text>
+        Acesso de teste — login: <strong>test@outlook.com</strong> | senha:{" "}
+        <strong>test</strong>
+      </Text>
       <Form action={formAction}>
         <FormField label="Email ou handle" htmlFor="email">
           <Input
             id="email"
             name="login"
             type="email"
-            placeholder="player@neonsave.gg"
+            placeholder="test@outlook.com"
             required
           />
         </FormField>

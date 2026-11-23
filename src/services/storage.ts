@@ -1,8 +1,8 @@
 export const STORAGE_KEYS = {
-  users: "runner-circle:users",
-  session: "runner-circle:session",
-  posts: "runner-circle:posts",
-  comments: "runner-circle:comments",
+  users: "gamer-flow:users",
+  session: "gamer-flow:session",
+  posts: "gamer-flow:posts",
+  comments: "gamer-flow:comments",
 } as const;
 
 export function readStorage<T>(key: string, fallback: T): T {

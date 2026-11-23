@@ -53,8 +53,8 @@ const demoUser: StoredUser = {
   id: "user-demo",
   name: "Francyptc",
   username: "Francyptc",
-  login: "player@neonsave.gg",
-  password: "neon123",
+  login: "test@outlook.com",
+  password: "test",
   avatarUrl: "/images/avatar-francyptc.png",
   bio: "Colecionador de mundos, finais secretos e runs perfeitas.",
   workoutsCount: 4,
@@ -69,6 +69,8 @@ function getUsers(): StoredUser[] {
         ...user,
         name: demoUser.name,
         username: demoUser.username,
+        login: demoUser.login,
+        password: demoUser.password,
         avatarUrl: demoUser.avatarUrl,
       }
       : user);
