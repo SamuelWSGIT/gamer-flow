@@ -3,7 +3,12 @@
   place-items: center;
   width: 100%;
   aspect-ratio: 4 / 3;
-  border-radius: 8px;
-  background-color: #c9c9c9;
-  color: #ececec;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background:
+    linear-gradient(135deg, rgba(255, 59, 212, 0.15), transparent 45%),
+    linear-gradient(315deg, rgba(37, 229, 236, 0.15), transparent 45%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 10px),
+    #120d25;
+  color: var(--blue);
 }

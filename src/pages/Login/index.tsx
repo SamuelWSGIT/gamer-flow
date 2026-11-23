@@ -50,7 +50,7 @@ async function loginAction(
     });
 
     return {
-      message: "Login realizado com sucesso! Você será redirecionado.",
+      message: "Login realizado! Redirecionando para o arquivo.",
       status: "success",
     };
   } catch (error) {
@@ -81,16 +81,16 @@ function Login() {
   }, [navigate, state.status]);
 
   return (
-    <AuthLayout bannerImage="/images/banner-login.png">
-      <Title>LOGIN</Title>
-      <Text bold>Boas-vindas! Faça seu login.</Text>
+    <AuthLayout bannerImage="/images/cyberpunk-banner-login.png">
+      <Title>Access terminal</Title>
+      <Text bold>Conecte-se ao seu arquivo de partidas.</Text>
       <Form action={formAction}>
-        <FormField label="Email ou usuário" htmlFor="email">
+        <FormField label="Email ou handle" htmlFor="email">
           <Input
             id="email"
             name="login"
             type="email"
-            placeholder="usuario123@hotmail.com"
+            placeholder="player@neonsave.gg"
             required
           />
         </FormField>
@@ -103,7 +103,7 @@ function Login() {
             required
           />
         </FormField>
-        <Checkbox id="remember">Lembrar-me</Checkbox>
+        <Checkbox id="remember">Manter sessão ativa</Checkbox>
         {state.message && (
           <Text
             role={state.status === "error" ? "alert" : "status"}
@@ -118,15 +118,15 @@ function Login() {
           disabled={isPending}
           icon={<ArrowRight size={20} />}
         >
-          {isPending ? "Entrando..." : "Login"}
+          {isPending ? "Conectando..." : "Entrar"}
         </Button>
       </Form>
       <AuthLink
-        linkText="Crie seu cadastro!"
+        linkText="Criar novo perfil"
         icon={<ClipboardList size={20} />}
         to="/auth/cadastro"
       >
-        Ainda não tem conta?
+        Ainda não tem acesso?
       </AuthLink>
     </AuthLayout>
   );

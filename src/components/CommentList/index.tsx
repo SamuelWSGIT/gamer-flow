@@ -12,7 +12,7 @@ function CommentList({ comments }: CommentListProps) {
     return (
       <EmptyState
         title="Nenhum comentário ainda..."
-        description="Seja a primeira pessoa a comentar neste treino."
+        description="Seja a primeira pessoa a comentar neste game log."
       />
     );
   }
@@ -22,7 +22,7 @@ function CommentList({ comments }: CommentListProps) {
       {comments.map((comment) => (
         <Comment
           key={comment.id}
-          avatarSrc={comment.author.avatarUrl || "https://i.pravatar.cc/96?img=68"}
+          avatarSrc={comment.author.avatarUrl || "/images/logo.png"}
           author={comment.author.name}
           text={comment.text}
         />

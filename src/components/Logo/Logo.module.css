@@ -1,3 +1,4 @@
 .logo {
   width: 198px;
+  filter: drop-shadow(0 0 0.75rem rgba(37, 229, 236, 0.42));
 }

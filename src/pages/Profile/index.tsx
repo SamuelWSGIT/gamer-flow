@@ -134,12 +134,14 @@ function Profile() {
           {visiblePosts.map((post) => (
             <PostCard
               key={post.id}
+              title={post.title}
               imageUrl={post.imageUrl}
               time={formatDuration(post.durationSeconds)}
               activity={post.type}
-              distance={`${post.distanceMeters / 1000}km`}
-              calories={`${post.calories} kcal`}
-              heartRate={`${post.heartRateBpm} bpm`}
+              platform={post.platform}
+              completionPercent={post.completionPercent}
+              achievements={post.achievements}
+              rating={post.rating}
               author={post.author.name}
               avatarSrc={post.author.avatarUrl || loggedUser.avatarUrl}
               likes={post.likesCount}

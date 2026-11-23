@@ -1,7 +1,8 @@
 import { Navigate } from "react-router";
+import { clearSession } from "../../services/user";
 
 export function Logout() {
-    sessionStorage.removeItem("token"); 
+    clearSession();
 
     return <Navigate    to="/auth/login" replace />;
 }

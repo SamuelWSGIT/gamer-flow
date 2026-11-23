@@ -35,7 +35,7 @@ function PostList() {
   }
 
   if (!posts) {
-    return <div>Carregando posts...</div>;
+    return <div>Sincronizando biblioteca...</div>;
   }
 
   return (
@@ -43,12 +43,14 @@ function PostList() {
       {posts.map((post) => (
         <PostCard
           key={post.id}
+          title={post.title}
           imageUrl={post.imageUrl}
           time={formatDuration(post.durationSeconds)}
           activity={post.type}
-          distance={`${String(post.distanceMeters / 1000)}km`}
-          calories={`${String(post.calories)} kcal`}
-          heartRate={`${String(post.heartRateBpm)} bpm`}
+          platform={post.platform}
+          completionPercent={post.completionPercent}
+          achievements={post.achievements}
+          rating={post.rating}
           author={post.author.name}
           avatarSrc={post.author.avatarUrl}
           comments={post.commentsCount}

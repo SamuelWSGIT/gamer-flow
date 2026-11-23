@@ -41,7 +41,7 @@ async function registerAction(
     !password
   ) {
     return {
-      message: "Não foi possível criar o usuário: preencha todos os campos.",
+      message: "Não foi possível criar o perfil: preencha todos os campos.",
       status: "error",
     };
   }
@@ -54,12 +54,12 @@ async function registerAction(
     });
 
     return {
-      message: "Usuário criado com sucesso! Você será redirecionado para o login.",
+      message: "Perfil criado! Preparando seu acesso.",
       status: "success",
     };
   } catch (error) {
     return {
-      message: `Não foi possível criar o usuário: ${getApiErrorMessage(error)}`,
+      message: `Não foi possível criar o perfil: ${getApiErrorMessage(error)}`,
       status: "error",
     };
   }
@@ -85,20 +85,20 @@ function Register() {
   }, [navigate, state.status]);
 
   return (
-    <AuthLayout bannerImage="/images/banner-register.png">
-      <Title>CADASTRO</Title>
-      <Text bold>Junte-se à nossa comunidade!</Text>
-      <Text>Preencha seus dados:</Text>
+    <AuthLayout bannerImage="/images/cyberpunk-banner-register.png">
+      <Title>New player</Title>
+      <Text bold>Crie seu perfil na rede de jogadores.</Text>
+      <Text>Configure seu acesso:</Text>
       <Form action={formAction}>
         <FormField label="Nome" htmlFor="name">
-          <Input id="name" name="name" placeholder="Seu nome" required />
+          <Input id="name" name="name" placeholder="Seu handle" required />
         </FormField>
-        <FormField label="Email ou usuário" htmlFor="email">
+        <FormField label="Email ou handle" htmlFor="email">
           <Input
             id="email"
             name="login"
             type="email"
-            placeholder="usuario123@hotmail.com"
+            placeholder="player@neonsave.gg"
             required
           />
         </FormField>
@@ -111,7 +111,7 @@ function Register() {
             required
           />
         </FormField>
-        <Checkbox id="remember">Lembrar-me</Checkbox>
+        <Checkbox id="remember">Manter sessão ativa</Checkbox>
         {state.message && (
           <Text
             role={state.status === "error" ? "alert" : "status"}
@@ -126,11 +126,11 @@ function Register() {
           disabled={isPending}
           icon={<ArrowRight size={20} />}
         >
-          {isPending ? "Cadastrando..." : "Cadastrar"}
+          {isPending ? "Criando..." : "Criar perfil"}
         </Button>
       </Form>
-      <AuthLink linkText="Faça seu login!" to="/auth/login">
-        Já tem conta?
+      <AuthLink linkText="Acessar terminal" to="/auth/login">
+        Já tem um perfil?
       </AuthLink>
     </AuthLayout>
   );

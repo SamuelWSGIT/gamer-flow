@@ -1,10 +1,11 @@
 import { useState, type ComponentProps } from "react";
 import {
-  Flame,
-  Footprints,
-  HeartPulse,
+  Gauge,
+  Gamepad2,
   MessageSquare,
+  Star,
   ThumbsUp,
+  Trophy,
 } from "lucide-react";
 import { createComment, getComments, type Comment } from "../../services/comments";
 import { likePost, unLikePost } from "../../services/posts";
@@ -18,11 +19,13 @@ import styles from "./PostCard.module.css";
 
 type PostCardProps = ComponentProps<"article"> & {
   imageUrl?: string | null;
+  title: string;
   time: string;
   activity: string;
-  distance: string;
-  calories: string;
-  heartRate: string;
+  platform: string;
+  completionPercent: number;
+  achievements: number;
+  rating: number;
   author: string;
   avatarSrc?: string | null;
   likes: number;
@@ -35,11 +38,13 @@ type PostCardProps = ComponentProps<"article"> & {
 
 function PostCard({
   imageUrl,
+  title,
   time,
   activity,
-  distance,
-  calories,
-  heartRate,
+  platform,
+  completionPercent,
+  achievements,
+  rating,
   author,
   avatarSrc,
   comments,
@@ -56,6 +61,7 @@ function PostCard({
   const [commentsList, setCommentsList] = useState<Comment[]>([]);
   const [commentsCount, setCommentsCount] = useState(Number(comments));
   const [commentsLoading, setCommentsLoading] = useState(false);
+  const modeLabel = activity === "solo" ? "SOLO" : activity === "co-op" ? "CO-OP" : activity;
 
   async function handleLike() {
     try {
@@ -106,24 +112,30 @@ function PostCard({
         <ImagePlaceholder />
       )}
       <div className={styles.content}>
-        <p className={styles.timeLabel}>Tempo:</p>
+        <h2 className={styles.gameTitle}>{title}</h2>
+        <p className={styles.timeLabel}>Tempo de jogo</p>
         <p className={styles.time}>{time}</p>
-        <Tag>{activity}</Tag>
+        <Tag>{modeLabel}</Tag>
         <div className={styles.stats}>
           <StatChip
-            icon={<Footprints size={16} />}
-            label="Distância"
-            value={distance}
+            icon={<Gamepad2 size={16} />}
+            label="Plataforma"
+            value={platform}
           />
           <StatChip
-            icon={<Flame size={16} />}
-            label="Calorias"
-            value={calories}
+            icon={<Trophy size={16} />}
+            label="Conclusão"
+            value={`${completionPercent}%`}
           />
           <StatChip
-            icon={<HeartPulse size={16} />}
-            label="Batimentos"
-            value={heartRate}
+            icon={<Star size={16} />}
+            label="Nota"
+            value={rating.toFixed(1)}
+          />
+          <StatChip
+            icon={<Gauge size={16} />}
+            label="Conquistas"
+            value={String(achievements)}
           />
         </div>
         <div className={styles.author}>

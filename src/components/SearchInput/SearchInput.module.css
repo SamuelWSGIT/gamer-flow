@@ -3,17 +3,21 @@
   align-items: center;
   gap: 0.5rem;
   width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 24px;
-  background-color: var(--gray-input);
-  color: var(--text);
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(20, 17, 38, 0.82);
+  color: var(--blue);
+  box-shadow: inset 0 0 1.5rem rgba(37, 229, 236, 0.04);
 }
 
 .input {
   flex: 1;
   border: none;
   background: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  color: var(--text);
 }
 
 .input:focus {
@@ -21,6 +25,6 @@
 }
 
 .input::placeholder {
-  color: var(--text);
+  color: var(--muted);
   opacity: 0.8;
 }

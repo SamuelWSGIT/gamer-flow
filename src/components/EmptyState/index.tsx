@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import { Footprints } from 'lucide-react'
+import { Gamepad2 } from 'lucide-react'
 import Text from '../Text'
 import styles from './EmptyState.module.css'
 
@@ -9,14 +9,14 @@ type EmptyStateProps = ComponentProps<'div'> & {
 }
 
 function EmptyState({
-  title = 'Nada por aqui ainda...',
-  description = 'Quando houver treinos publicados, eles aparecem aqui.',
+  title = 'Nenhum jogo no arquivo ainda...',
+  description = 'Quando houver sessões publicadas, elas aparecem aqui.',
   ...rest
 }: EmptyStateProps) {
   return (
     <div className={styles.emptyState} {...rest}>
       <span className={styles.icon}>
-        <Footprints size={40} />
+        <Gamepad2 size={40} />
       </span>
       <p className={styles.title}>{title}</p>
       <Text>{description}</Text>

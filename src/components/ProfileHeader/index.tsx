@@ -29,7 +29,7 @@ function ProfileHeader({
         <p className={styles.name}>{name}</p>
         <Text>{bio}</Text>
         <p className={styles.stats}>
-          <strong>{workouts}</strong> Treinos
+          <strong>{workouts}</strong> Sessões
         </p>
       </div>
       <NavLink className={styles.edit} to="/perfil/editar">

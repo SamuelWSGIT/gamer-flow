@@ -5,7 +5,7 @@ type LogoProps = ComponentProps<'img'>
 
 function Logo({
   src = '/images/logo.png',
-  alt = 'Runner Circle',
+  alt = 'GamerFlow',
   ...rest
 }: LogoProps) {
   return <img className={styles.logo} src={src} alt={alt} {...rest} />

@@ -1,14 +1,16 @@
 .avatar {
   aspect-ratio: 1;
+  border: 2px solid var(--pink);
   border-radius: 50%;
   object-fit: cover;
+  box-shadow: 0 0 1rem rgba(255, 59, 212, 0.25);
 }
 
 .fallback {
   display: grid;
   place-items: center;
   background-color: var(--gray-input);
-  color: var(--gray);
+  color: var(--blue);
 }
 
 .fallback svg {

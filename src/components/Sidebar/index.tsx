@@ -12,17 +12,17 @@ function Sidebar({ ...rest }: SidebarProps) {
     <aside className={styles.sidebar} {...rest}>
       <Logo />
       <Button variant="link" to="/postagem">
-        Publicar
+        Novo registro
       </Button>
       <nav className={styles.nav}>
         <NavItem to="/" icon={<FileText size={24} />}>
-          Feed
+          Página Inicial
         </NavItem>
         <NavItem to="/perfil" icon={<CircleUserRound size={24} />}>
           Perfil
         </NavItem>
         <NavItem to="/auth/logout" icon={<LogOut size={24} />}>
-          Logout
+          Sair
         </NavItem>
       </nav>
     </aside>

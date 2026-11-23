@@ -1,11 +1,11 @@
 .appLayout {
   min-height: 100vh;
-  background-color: #fff;
+  background: transparent;
 }
 
 .container {
   display: flex;
-  max-width: 1200px;
+  max-width: 1440px;
   min-height: 100vh;
   margin: 0 auto;
 }
@@ -15,5 +15,16 @@
   flex-direction: column;
   gap: 2rem;
   flex: 1;
-  padding: 2rem 1rem;
+  min-width: 0;
+  padding: 2.5rem clamp(1rem, 4vw, 4rem);
+}
+
+@media (max-width: 720px) {
+  .container {
+    display: block;
+  }
+
+  .main {
+    padding: 1.5rem 1rem 2rem;
+  }
 }

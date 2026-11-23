@@ -6,11 +6,11 @@ import PostList from "../../components/PostList";
 function Feed() {
   return (
     <>
-      <SearchInput placeholder="O que você procura?" />
-      <ErrorBoundary fallback={<div>Erro ao carregar os posts</div>}>
-      <Suspense fallback={<div>Carregando posts...</div>} >
-        <PostList />
-      </Suspense>
+      <SearchInput placeholder="Buscar jogo, gênero ou player..." />
+      <ErrorBoundary fallback={<div>Falha ao sincronizar a biblioteca.</div>}>
+        <Suspense fallback={<div>Sincronizando biblioteca...</div>}>
+          <PostList />
+        </Suspense>
       </ErrorBoundary>
     </>
   );
