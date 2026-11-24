@@ -4,6 +4,8 @@ Projeto de portfólio adaptado por Samuel Almeida a partir do [Runner Circle da 
 
 ## Demonstração
 
+![Tela inicial do GamerFlow com feed de jogos](docs/demo-home.jpg)
+
 **[Acessar a aplicação na Vercel](https://gamerflow-six.vercel.app/)**
 
 1. Na [tela de login](https://gamerflow-six.vercel.app/auth/login), entre com a conta de demonstração abaixo ou crie uma conta local.
